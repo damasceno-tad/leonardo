@@ -16,6 +16,10 @@ print(drag_coeff)
 # at 100 km altitude
 
 import math
+import numpy as np
+from scipy.integrate import odeint
+import matplotlib.pyplot as plt
+
 pi = math.pi
 
 # Environment
@@ -40,6 +44,28 @@ motor_thrust = gravity * motor_Isp * motor_rate     # N
 satellite_mass = 10.0 # kg
 
 ## TODO: create simulation with odeint
+
+def dmass(y, t, mass_rate):
+    
+    if y > 0:
+        dmdt = -mass_rate
+    else:
+        dmdt = 0
+        
+    return dmdt
+
+  
+
+t = np.arange(0, 105+1, 1)
+
+mass_init = launcher_propl_mass
+mass = odeint(dmass, mass_init, t, args = (motor_rate,))
+# plt.plot(t, mass)
+# plt.axis([90, 105, -5, 5])
+# plt.grid(True)
+
+print(mass.min())
+
 
 
 
