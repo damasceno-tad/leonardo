@@ -12,9 +12,9 @@ print('Bora men')
 
 import math
 import numpy as np
-from scipy.integrate import odeint
 import matplotlib.pyplot as plt
 import ISA_leo as isa 
+import leo_sim as ls
 
 pi = math.pi
 
@@ -40,70 +40,27 @@ motor_thrust = gravity * motor_Isp * motor_rate     # N
 # Satellite
 satellite_mass = 10.0 # kg
 
-# Simplified simulation
-
-def drag(x_vel, rho, S, d_coeff):
-    D = 0.5 * rho * pow(x_vel, 2.0) * S * d_coeff
-    return D
-# Changed the drag function to use rho and surface separately     
-
-
-def flight(y, t, data):
-    alt =  y[0]
-    vel =  y[1]
-    mass = y[2]
-    
-    theor_thrust = data[0]
-    mass_rate    = data[1]
-    S            = data[2]    
-    cd           = data[3]
-    g            = data[4]
-    dry_mass     = data[5]
-    
-    # Propulsion verification: stop when propellant mass is finished
-    if mass > dry_mass:
-        dmdt = -mass_rate
-        thrust = theor_thrust
-    else:
-        dmdt = 0
-        thrust = 0
-   
-    T = isa.get_temperature(alt)
-    p = isa.get_pressure(alt)
-    rho = isa.density(T, p, isa.R)
-    drag_force = drag(vel, rho, S, cd)
-    accel = (thrust - drag_force)/mass - g
-    # TODO verify ascending or descending movement to correct drag orientation
-    
-       
-    dHdt = vel
-    dvdt = accel
-        
-    return [dHdt, dvdt, dmdt]
-
 
 t_f = np.arange(0, 120+0.1, 0.1)
-
-
-# TODO use total mass and differentiate propellant vs total mass in simul
 mass_init = launcher_propl_mass + launcher_empty_mass
+inp_data = [mass_init, motor_thrust, motor_rate, launcher_surface,
+            launcher_dragcoeff, launcher_empty_mass ]
 
-fdata = odeint(flight, [0,0,mass_init], t_f,
-               args = ([motor_thrust, motor_rate,
-                        launcher_surface, launcher_dragcoeff, gravity,
-                        launcher_empty_mass],))
 
-plt.plot(t_f, fdata[:,0], 'b')
+fdata2 = ls.sim(t_f, inp_data)
+
+
+plt.plot(t_f, fdata2[:,0], 'b')
 plt.grid(True)
 # plt.axis([90, 105, -5, 5])
 
 plt.figure()
-plt.plot(t_f, fdata[:,1], 'r')
+plt.plot(t_f, fdata2[:,1], 'r')
 # plt.axis([90, 105, -5, 5])
 plt.grid(True)
 
 plt.figure()
-plt.plot(t_f, fdata[:,2], 'k')
+plt.plot(t_f, fdata2[:,2], 'k')
 # plt.axis([90, 105, -5, 5])
 plt.grid(True)
   
