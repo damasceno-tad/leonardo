@@ -7,7 +7,7 @@ import ISA_leo as isa
 
 # The drag function calculates the drag force     
 def drag(x_vel, rho, S, d_coeff):
-    D = 0.5 * rho * pow(x_vel, 2.0) * S * d_coeff
+    D = 0.5 * rho * x_vel ** 2.0 * S * d_coeff
     return D
 
 
@@ -54,20 +54,8 @@ def sim(t, inp_data):
     launcher_dragcoeff  = inp_data[4]
     launcher_empty_mass = inp_data[5]
     
-    fdata = odeint (  flight, [0,0,mass_init], t,
+    fdata = odeint (  flight, [0, 0, mass_init], t,
             args = ( [motor_thrust, motor_rate,
             launcher_surface, launcher_dragcoeff, launcher_empty_mass],)  )
     
     return fdata
-
-
-
-
-
-
-  
-
-
-
-
-
