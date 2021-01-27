@@ -54,7 +54,7 @@ fdata2 = ls.sim(t_f, inp_data)
 
 # Plots
 plt.figure(1)
-plt.plot(t_f, fdata2[:, 0]*1e-3, 'b')
+plt.plot(t_f, fdata2[:, 0] * 1e-3, 'b')
 plt.xlabel('Time [s]')
 plt.ylabel('Altitude [km]')
 plt.grid(True)
@@ -62,7 +62,7 @@ plt.show()
 # plt.axis([90, 105, -5, 5])
 
 plt.figure(2)
-plt.plot(t_f, fdata2[:,1]*1e-3, 'r')
+plt.plot(t_f, fdata2[:,1] * 1e-3, 'r')
 plt.xlabel('Time [s]')
 plt.ylabel('Velocity [km/s]')
 plt.grid(True)
@@ -71,7 +71,7 @@ plt.show()
 
 
 plt.figure(3)
-plt.plot(t_f, fdata2[:,2]*1e-3, 'k')
+plt.plot(t_f, fdata2[:,2] * 1e-3, 'k')
 plt.xlabel('Time [s]')
 plt.ylabel('Mass [1000 kg]')
 plt.grid(True)

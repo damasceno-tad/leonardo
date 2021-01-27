@@ -37,7 +37,7 @@ def flight(y, t, data):
     p = isa.get_pressure(alt)
     rho = isa.density(T, p, isa.R)
     drag_force = drag(vel, rho, S, cd)
-    accel = (thrust - drag_force)/mass - g
+    accel = (thrust - drag_force) / mass - g
     # TODO verify ascending or descending movement to correct drag orientation
        
     dHdt = vel
